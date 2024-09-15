@@ -54,6 +54,7 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
     private DcMotor backRightDrive = null;
     private DcMotor motorForSucking = null;
     private DcMotor liftMotor = null;
+    private DcMotor fake = null;
     private CRServo swing = null;
     private DcMotor fly = null;
     private Servo airplane = null;
@@ -84,6 +85,7 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
         fly = hardwareMap.get(DcMotor.class, "fly");
         motorForSucking = hardwareMap.get(DcMotor.class, "suck");
         swing = hardwareMap.get(CRServo.class, "swing");
+        fake = hardwareMap.get(DcMotor.class, "this doesnt exist");
 
         cr1 = hardwareMap.get(CRServo.class, "cr1");
         cr2 = hardwareMap.get(CRServo.class, "cr2");
