@@ -31,20 +31,16 @@
 // Importing things
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-
-@TeleOp(name="Kypten's Dumb Layout The Third", group="Linear Opmode")
-public class CamdensDumbLayoutTheThird extends LinearOpMode {
+@Autonomous(name="Odometry", group="Autonomous")
+public class Odometry extends LinearOpMode {
 
     // Declare OpMode objects
     private final ElapsedTime runtime = new ElapsedTime();
@@ -81,17 +77,6 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        // Reset encoders
-        frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        // Run with encoder
-        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -99,66 +84,23 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
 
 
         // Declare random variables
-        boolean changed = false;
 
-        double drive;
-        double strafe;
-        double turn;
-        double frontLeftPower;
-        double frontRightPower;
-        double backLeftPower;
-        double backRightPower;
 
-        double liftPos = 0;
-        int liftTargPos = 0;
 
 
 
         while (opModeIsActive()) {
 
 
-            // Drive variables
-            drive = -gamepad1.left_stick_y;
-            strafe = gamepad1.left_stick_x;
-            turn  =  gamepad1.right_stick_x/2;
-
-            // Setting the 3 intake servos
-
-            // slow mode! //
-            if(gamepad1.a && !changed) {
-                if(slow == 1) slow = 2;
-                else slow = 1;
-                changed = true;
-            } else if(!gamepad1.a) changed = false;
-
-
-
-            // Drive equations
-            frontLeftPower    = Range.clip((drive + strafe + turn)/slow, -0.75, 0.75);
-            frontRightPower   = Range.clip((drive - strafe - turn)/slow, -0.75, 0.75);
-            backLeftPower    = Range.clip((drive - strafe + turn)/slow, -0.75, 0.75);
-            backRightPower   = Range.clip((drive + strafe - turn)/slow, -0.75, 0.75);
-
-            frontLeftDrive.setPower(frontLeftPower);
-            backLeftDrive.setPower(backLeftPower);
-            frontRightDrive.setPower(frontRightPower);
-            backRightDrive.setPower(backRightPower);
 
 
 
             // TELEMETRY
             telemetry.addData("Status", "Run Time: " + runtime);
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
             telemetry.addData("FL Encoder", frontLeftDrive.getCurrentPosition());
             telemetry.addData("FR Encoder", frontRightDrive.getCurrentPosition());
             telemetry.addData("BL Encoder", backLeftDrive.getCurrentPosition());
             telemetry.addData("BR Encoder", backRightDrive.getCurrentPosition());
-
-            telemetry.addData("FL Power", frontLeftPower);
-            telemetry.addData("FR Power", frontRightPower);
-            telemetry.addData("BL Power", backLeftPower);
-            telemetry.addData("BR Power", backRightPower);
-
 
             telemetry.update();
         }
