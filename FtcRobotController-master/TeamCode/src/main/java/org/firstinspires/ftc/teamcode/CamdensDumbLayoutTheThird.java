@@ -118,9 +118,9 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
 
 
             // Drive variables
-            drive = -gamepad1.left_stick_y;
-            strafe = gamepad1.left_stick_x;
-            turn  =  gamepad1.right_stick_x/2;
+            drive = gamepad1.left_stick_x;
+            strafe = -gamepad1.left_stick_y;
+            turn  =  gamepad1.right_stick_x;
 
             // Setting the 3 intake servos
 
