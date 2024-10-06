@@ -73,10 +73,10 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
 
 
         // Motor directions
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
         runtime.reset();
@@ -88,10 +88,10 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
         backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Run with encoder
-        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
@@ -118,8 +118,8 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
 
 
             // Drive variables
-            drive = gamepad1.left_stick_x;
-            strafe = -gamepad1.left_stick_y;
+            drive = -gamepad1.left_stick_x;
+            strafe = gamepad1.left_stick_y;
             turn  =  gamepad1.right_stick_x;
 
             // Setting the 3 intake servos
@@ -134,10 +134,10 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
 
 
             // Drive equations
-            frontLeftPower    = Range.clip((drive + strafe + turn)/slow, -0.75, 0.75);
+            frontLeftPower    = Range.clip((drive + strafe - turn)/slow, -0.75, 0.75);
             frontRightPower   = Range.clip((drive - strafe - turn)/slow, -0.75, 0.75);
             backLeftPower    = Range.clip((drive - strafe + turn)/slow, -0.75, 0.75);
-            backRightPower   = Range.clip((drive + strafe - turn)/slow, -0.75, 0.75);
+            backRightPower   = Range.clip((drive + strafe + turn)/slow, -0.75, 0.75);
 
             frontLeftDrive.setPower(frontLeftPower);
             backLeftDrive.setPower(backLeftPower);

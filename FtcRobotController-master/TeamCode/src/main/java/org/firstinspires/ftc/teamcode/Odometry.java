@@ -31,12 +31,18 @@
 // Importing things
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.sun.tools.javac.util.Position;
+
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 
 @Autonomous(name="Odometry", group="Autonomous")
@@ -74,36 +80,33 @@ public class Odometry extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        drive.setPoseEstimate(new Pose2d(-65,-48));
+
+
+        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d(-65, -48))
+                .forward(50)
+                .splineTo(new Vector2d(48,0),Math.toRadians(90))
+                .splineTo(new Vector2d(0, 48), Math.toRadians(180))
+                .splineTo(new Vector2d(-48,0), Math.toRadians(270))
+                .splineTo(new Vector2d(0,-48), 0)
+
+                .build();
+
+
         waitForStart();
-        runtime.reset();
+        if (isStopRequested()) return;
 
+        drive.followTrajectory(trajectory);
 
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("finalX", poseEstimate.getX());
+        telemetry.addData("finalY", poseEstimate.getY());
+        telemetry.addData("finalHeading", poseEstimate.getHeading());
+        telemetry.update();
 
-
-
-
-
-        // Declare random variables
-
-
-
-
-
-        while (opModeIsActive()) {
-
-
-
-
-
-            // TELEMETRY
-            telemetry.addData("Status", "Run Time: " + runtime);
-            telemetry.addData("FL Encoder", frontLeftDrive.getCurrentPosition());
-            telemetry.addData("FR Encoder", frontRightDrive.getCurrentPosition());
-            telemetry.addData("BL Encoder", backLeftDrive.getCurrentPosition());
-            telemetry.addData("BR Encoder", backRightDrive.getCurrentPosition());
-
-            telemetry.update();
-        }
+        while (!isStopRequested() && opModeIsActive()) ;
     }
 
 }
