@@ -87,10 +87,10 @@ public class Odometry extends LinearOpMode {
 
         Trajectory trajectory = drive.trajectoryBuilder(new Pose2d(-65, -48))
                 .forward(50)
-                .splineTo(new Vector2d(-48,0),Math.toRadians(90))
-                .splineTo(new Vector2d(0, 48), Math.toRadians(180))
-                .splineTo(new Vector2d(48,0), Math.toRadians(270))
-                .splineTo(new Vector2d(0,-48), 0)
+                .splineTo(new Vector2d(-48,0),Math.toRadians(270))
+                .splineTo(new Vector2d(0, 48), Math.toRadians(0))
+                .splineTo(new Vector2d(48,0), Math.toRadians(90))
+                .splineTo(new Vector2d(0,-48), 180)
                 .build();
 
 
