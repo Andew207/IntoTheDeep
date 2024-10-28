@@ -82,11 +82,27 @@ public class Odometry extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        drive.setPoseEstimate(new Pose2d(-60,-36));
+        drive.setPoseEstimate(new Pose2d(36,-60, Math.toRadians(90)));
+        /*
 
+        |⎺⎺⎺⎺⎺⎺/⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺\⎺⎺⎺|
+        |⎺⎺⎺⎺⎺                 ^  +x           \|
+        |                   |   +y           |
+        | █ █ █        /|⎺⎺⎺⎺⎺|\  ->      █ █ █ |
+        |             / |██| \               |
+        |             \ |██| /               |
+        | █ █ █        \|__|/          █ █ █ |
+        |                                    |
+        |\                                 __|
+        |_\_______________________________/__|
 
-        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d(-60, -36))
-                .lineTo(new Vector2d(-36,0))
+        */
+
+        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
+                .lineTo(new Vector2d(0,-21))
+                .lineTo(new Vector2d(0,-25))
+                .lineTo(new Vector2d(48,-25))
+                .lineTo(new Vector2d(-54,-54))
                 .build();
 
 
