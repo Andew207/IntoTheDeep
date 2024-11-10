@@ -85,31 +85,42 @@ public class Odometry extends LinearOpMode {
         drive.setPoseEstimate(new Pose2d(36,-60, Math.toRadians(90)));
         /*
 
-        |⎺⎺⎺⎺⎺⎺/⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺\⎺⎺⎺|
-        |⎺⎺⎺⎺⎺                 ^  +x           \|
-        |                   |   +y           |
-        | █ █ █        /|⎺⎺⎺⎺⎺|\  ->      █ █ █ |
-        |             / |██| \               |
-        |             \ |██| /               |
-        | █ █ █        \|__|/          █ █ █ |
-        |                                    |
-        |\                                 __|
-        |_\_______________________________/__|
+        ╔══/═══════════════════════════════\═╗
+        ╠═/                 ↑  +x           \║
+        ║                       +y           ║
+        ║ █ █ █        /╔══╗\   →      █ █ █ ║
+        ║             / ║██║ \               ║
+        ║             \ ║██║ /               ║
+        ║ █ █ █        \╚══╝/          █ █ █ ║
+        ║                                    ║
+        ║\                                 /═╣
+        ╚═\═══════════════════════════════/══╝
 
         */
 
-        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
+        Trajectory blueright = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
                 .lineTo(new Vector2d(0,-21))
+// Moves to point 1 on the trejectory
                 .lineTo(new Vector2d(0,-25))
                 .lineTo(new Vector2d(48,-25))
+// Moves to point 2 on the trejectory
                 .lineTo(new Vector2d(-54,-54))
+// Moves to point 3 on the trejectory
+                .lineTo(new Vector2d(-36,60))
+// Moves to point 4 on the trejectory
+                .lineTo(new Vector2d(-54,-54))
+// Moves to point 5 on the trejectory
+                .lineTo(new Vector2d(-36,72))
+// Moves to point 6 on the trejectory
+                .lineTo(new Vector2d(-54,-54))
+// Moves to point 7 on the trejectory
                 .build();
 
 
         waitForStart();
         if (isStopRequested()) return;
 
-        drive.followTrajectory(trajectory);
+        drive.followTrajectory(blueright);
 
         Pose2d poseEstimate = drive.getPoseEstimate();
         telemetry.addData("finalX", poseEstimate.getX());
