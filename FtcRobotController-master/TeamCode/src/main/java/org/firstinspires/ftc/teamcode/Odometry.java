@@ -81,8 +81,17 @@ public class Odometry extends LinearOpMode {
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
+        //TODO: Set the autonomous pose estimate to the matching trajectory
         drive.setPoseEstimate(new Pose2d(36,-60, Math.toRadians(90)));
+        // pose estimate for blueright trajectory
+        //drive.setPoseEstimate(new pose2d(-36,-60, Math.toRadians(90)));
+        // pose estimate for blueleft trajectory
+        //drive.setPoseEstimate(new pose2d(36,60, Math.toRadians(180)));
+        // pose estimate for redleft trajectory
+        //drive.setPoseEstimate(new pose2d(-36,60, Math.toRadians(180)));
+        // pose estimate for redright trajectory
+
+
         /*
 
         ╔══/═══════════════════════════════\═╗
@@ -95,31 +104,35 @@ public class Odometry extends LinearOpMode {
         ║                                    ║
         ║\                                 /═╣
         ╚═\═══════════════════════════════/══╝
-
+        Go to https://docs.google.com/document/d/1GJCBK_APcPKTCdh_Iw3J0L3xCFaDmAAdjnVdM-0Za-Y/edit?pli=1&tab=t.1vz37yah5nt#heading=h.dlpsbpb5k77b
+        to find out how the trajectories work.
         */
 
         Trajectory blueright = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
                 .lineTo(new Vector2d(0,-21))
-// Moves to point 1 on the trejectory
                 .lineTo(new Vector2d(0,-25))
                 .lineTo(new Vector2d(48,-25))
-// Moves to point 2 on the trejectory
                 .lineTo(new Vector2d(-54,-54))
-// Moves to point 3 on the trejectory
                 .lineTo(new Vector2d(-36,60))
-// Moves to point 4 on the trejectory
                 .lineTo(new Vector2d(-54,-54))
-// Moves to point 5 on the trejectory
                 .lineTo(new Vector2d(-36,72))
-// Moves to point 6 on the trejectory
                 .lineTo(new Vector2d(-54,-54))
-// Moves to point 7 on the trejectory
                 .build();
 
+        Trajectory redleft = drive.trajectoryBuilder(new Pose2d(36,60, Math.toRadians(180)))
+                .lineTo(new Vector2d(0,21))
+                .lineTo(new Vector2d(0,25))
+                .lineTo(new Vector2d(48,25))
+                .lineTo(new Vector2d(54,54))
+                .lineTo(new Vector2d(-36,-60))
+                .lineTo(new Vector2d(54,54))
+                .lineTo(new Vector2d(-36,-72))
+                .lineTo(new Vector2d(54,54))
+                .build();
 
         waitForStart();
         if (isStopRequested()) return;
-
+        //TODO: Change the followed trajectory to match its position on the field
         drive.followTrajectory(blueright);
 
         Pose2d poseEstimate = drive.getPoseEstimate();
