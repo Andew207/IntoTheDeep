@@ -105,7 +105,7 @@ public class Odometry extends LinearOpMode {
         ║\                                 /═╣
         ╚═\═══════════════════════════════/══╝
         Go to https://docs.google.com/document/d/1GJCBK_APcPKTCdh_Iw3J0L3xCFaDmAAdjnVdM-0Za-Y/edit?pli=1&tab=t.1vz37yah5nt#heading=h.dlpsbpb5k77b
-        to find out how the trajectories work.
+        to find out how the trajectories work..
         */
 
         Trajectory blueright = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
