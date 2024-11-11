@@ -82,7 +82,7 @@ public class Odometry extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        drive.setPoseEstimate(new Pose2d(36,-60, Math.toRadians(90)));
+        drive.setPoseEstimate(new Pose2d(0,0,0));
         /*
 
         |⎺⎺⎺⎺⎺⎺/⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺\⎺⎺⎺|
@@ -98,11 +98,20 @@ public class Odometry extends LinearOpMode {
 
         */
 
-        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
-                .lineTo(new Vector2d(0,-21))
-                .lineTo(new Vector2d(0,-25))
-                .lineTo(new Vector2d(48,-25))
-                .lineTo(new Vector2d(-54,-54))
+        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
+                .lineTo(new Vector2d(24,0))
+                .splineTo(new Vector2d(0,24), Math.toRadians(180))
+                .splineTo(new Vector2d(-24,0), Math.toRadians(-90))
+                .splineTo(new Vector2d(0,-24), Math.toRadians(0))
+                .splineTo(new Vector2d(24,0), Math.toRadians(90))
+                .splineTo(new Vector2d(0,24), Math.toRadians(180))
+                .splineTo(new Vector2d(-24,0), Math.toRadians(-90))
+                .splineTo(new Vector2d(0,-24), Math.toRadians(0))
+                .splineTo(new Vector2d(24,0), Math.toRadians(90))
+                .splineTo(new Vector2d(0,24), Math.toRadians(180))
+                .splineTo(new Vector2d(-24,0), Math.toRadians(-90))
+                .splineTo(new Vector2d(0,-24), Math.toRadians(0))
+                .splineTo(new Vector2d(24,0), Math.toRadians(90))
                 .build();
 
 
