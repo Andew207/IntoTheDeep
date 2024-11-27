@@ -31,18 +31,24 @@
 // Importing things
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.sun.tools.javac.util.Position;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.opencv.core.Mat;
 
 
 @Autonomous(name="Odometry", group="Autonomous")
@@ -82,14 +88,8 @@ public class Odometry extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         //TODO: Set the autonomous pose estimate to the matching trajectory
-        drive.setPoseEstimate(new Pose2d(36,-60, Math.toRadians(90)));
-        // pose estimate for blueright trajectory
-        //drive.setPoseEstimate(new pose2d(-36,-60, Math.toRadians(90)));
-        // pose estimate for blueleft trajectory
-        //drive.setPoseEstimate(new pose2d(36,60, Math.toRadians(180)));
-        // pose estimate for redleft trajectory
-        //drive.setPoseEstimate(new pose2d(-36,60, Math.toRadians(180)));
-        // pose estimate for redright trajectory
+        drive.setPoseEstimate(new Pose2d(-36,-60, Math.toRadians(90)));
+
 
 
         /*
@@ -110,58 +110,75 @@ public class Odometry extends LinearOpMode {
         Go to https://docs.google.com/document/d/1GJCBK_APcPKTCdh_Iw3J0L3xCFaDmAAdjnVdM-0Za-Y/edit?pli=1&tab=t.1vz37yah5nt#heading=h.dlpsbpb5k77b
         to find out more...
         */
-        // The trajectory for the robot on the position "blueleft"
+        // The trajectory for the autonomous period
         //TODO: change all of the trajectories
-        Trajectory blueleft = drive.trajectoryBuilder(new Pose2d(36,60, Math.toRadians(180)))
-                .lineTo(new Vector2d(0,-21))
-                .lineTo(new Vector2d(0,-25))
-                .lineTo(new Vector2d(-48,-25))
-                .lineTo(new Vector2d(-54,-54))
-                .lineTo(new Vector2d(-36,-60))
-                .lineTo(new Vector2d(-54,-54))
-                .lineTo(new Vector2d(-36,-72))
-                .lineTo(new Vector2d(-54,-54))
+        Trajectory auto = drive.trajectoryBuilder(new Pose2d(-36,-60, Math.toRadians(90)))
+                .lineTo(new Vector2d(-36,-6))
+                .splineToConstantHeading(new Vector2d(-44, -6), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .splineTo(new Vector2d(-56, -51), Math.toRadians(90), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .splineTo(new Vector2d(-40,-6), Math.toRadians(90), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .splineTo(new Vector2d(-54, -6), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .splineTo(new Vector2d(-56, -51), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .splineTo(new Vector2d(-56, -6), Math.toRadians(90), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 10;
+                    }
+                }, null)
+                .splineTo(new Vector2d(-62,-6), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .splineTo(new Vector2d(-62, -51), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .splineToConstantHeading(new Vector2d(-62, -40), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 20;
+                    }
+                }, null)
+                .strafeTo(new Vector2d(-100,-104))
                 .build();
-        // The trajectory for the robot on the position "blueright"
-        Trajectory blueright = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
-                .lineTo(new Vector2d(0,-21))
-                .lineTo(new Vector2d(0,-25))
-                .lineTo(new Vector2d(48,-25))
-                .lineTo(new Vector2d(-54,-54))
-                .lineTo(new Vector2d(-36,60))
-                .lineTo(new Vector2d(-54,-54))
-                .lineTo(new Vector2d(-36,72))
-                .lineTo(new Vector2d(-54,-54))
-                .build();
-        // The trajectory for the robot on the position "redleft"
-        Trajectory redleft = drive.trajectoryBuilder(new Pose2d(36,60, Math.toRadians(180)))
-                .lineTo(new Vector2d(0,21))
-                .lineTo(new Vector2d(0,25))
-                .lineTo(new Vector2d(48,25))
-                .lineTo(new Vector2d(54,54))
-                .lineTo(new Vector2d(36,60))
-                .lineTo(new Vector2d(54,54))
-                .lineTo(new Vector2d(36,72))
-                .lineTo(new Vector2d(54,54))
-                .build();
-        // The trajectory for the robot on the position "redright"
-        Trajectory redright = drive.trajectoryBuilder(new Pose2d(36,60, Math.toRadians(180)))
-                .lineTo(new Vector2d(0,21))
-                .lineTo(new Vector2d(0,25))
-                .lineTo(new Vector2d(48,25))
-                .lineTo(new Vector2d(54,54))
-                .lineTo(new Vector2d(36,60))
-                .lineTo(new Vector2d(54,54))
-                .lineTo(new Vector2d(36,72))
-                .lineTo(new Vector2d(54,54))
-                .build();
+
+
 
         waitForStart();
         if (isStopRequested()) return;
         //TODO: Change the followed trajectory to match its position on the field
         // Note that the left/right part of the trajectories is based on the side that you are
         // facing, as in "blueleft" is across from "redright". (see lines 95-109)
-        drive.followTrajectory(blueright);
+        drive.followTrajectory(auto);
         // This tells the robot to follow the trajectory in the argument.
         Pose2d poseEstimate = drive.getPoseEstimate();
         telemetry.addData("finalX", poseEstimate.getX());
