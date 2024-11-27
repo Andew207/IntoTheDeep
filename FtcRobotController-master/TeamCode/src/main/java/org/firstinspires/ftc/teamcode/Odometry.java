@@ -94,7 +94,7 @@ public class Odometry extends LinearOpMode {
 
         /*
         This is a representation of the game field's starting positions:
-           robot↓                 robot↓
+           robot ↓               robot ↓
         ╔══/═══════════════════════════════\═╗
         ╠═/ redright         ↑  +x redleft  \║
         ║                       +y           ║
@@ -105,12 +105,13 @@ public class Odometry extends LinearOpMode {
         ║                                    ║
         ║\ blueleft             blueright  /═╣
         ╚═\═══════════════════════════════/══╝
-         robot↑                robot↑
+         robot ↑               robot ↑
         Starting positions ↑
         Go to https://docs.google.com/document/d/1GJCBK_APcPKTCdh_Iw3J0L3xCFaDmAAdjnVdM-0Za-Y/edit?pli=1&tab=t.1vz37yah5nt#heading=h.dlpsbpb5k77b
         to find out more...
         */
-
+        // The trajectory for the robot on the position "blueleft"
+        //TODO: change all of the trajectories
         Trajectory blueleft = drive.trajectoryBuilder(new Pose2d(36,60, Math.toRadians(180)))
                 .lineTo(new Vector2d(0,-21))
                 .lineTo(new Vector2d(0,-25))
@@ -121,7 +122,7 @@ public class Odometry extends LinearOpMode {
                 .lineTo(new Vector2d(-36,-72))
                 .lineTo(new Vector2d(-54,-54))
                 .build();
-
+        // The trajectory for the robot on the position "blueright"
         Trajectory blueright = drive.trajectoryBuilder(new Pose2d(36, -60, Math.toRadians(90)))
                 .lineTo(new Vector2d(0,-21))
                 .lineTo(new Vector2d(0,-25))
@@ -132,7 +133,7 @@ public class Odometry extends LinearOpMode {
                 .lineTo(new Vector2d(-36,72))
                 .lineTo(new Vector2d(-54,-54))
                 .build();
-
+        // The trajectory for the robot on the position "redleft"
         Trajectory redleft = drive.trajectoryBuilder(new Pose2d(36,60, Math.toRadians(180)))
                 .lineTo(new Vector2d(0,21))
                 .lineTo(new Vector2d(0,25))
@@ -143,7 +144,7 @@ public class Odometry extends LinearOpMode {
                 .lineTo(new Vector2d(36,72))
                 .lineTo(new Vector2d(54,54))
                 .build();
-
+        // The trajectory for the robot on the position "redright"
         Trajectory redright = drive.trajectoryBuilder(new Pose2d(36,60, Math.toRadians(180)))
                 .lineTo(new Vector2d(0,21))
                 .lineTo(new Vector2d(0,25))
@@ -159,7 +160,7 @@ public class Odometry extends LinearOpMode {
         if (isStopRequested()) return;
         //TODO: Change the followed trajectory to match its position on the field
         // Note that the left/right part of the trajectories is based on the side that you are
-        // facing, as in "blueleft" is across from "redright". (see line 95-109)
+        // facing, as in "blueleft" is across from "redright". (see lines 95-109)
         drive.followTrajectory(blueright);
         // This tells the robot to follow the trajectory in the argument.
         Pose2d poseEstimate = drive.getPoseEstimate();
