@@ -38,16 +38,19 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.sun.tools.javac.util.Position;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 import org.opencv.core.Mat;
 
 
@@ -61,6 +64,8 @@ public class Odometry extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
+    private Encoder leftEncoder, rightEncoder, frontEncoder;
+
 
     //timer
     private final ElapsedTime timer = new ElapsedTime();
@@ -77,6 +82,11 @@ public class Odometry extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right");
 
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "back_left"));
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "back_right"));
+        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "front_left"));
+
+
         int slow = 1;
 
 
@@ -85,6 +95,10 @@ public class Odometry extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        leftEncoder.setDirection(Encoder.Direction.REVERSE);
+        rightEncoder.setDirection(Encoder.Direction.REVERSE);
+        frontEncoder.setDirection(Encoder.Direction.FORWARD);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         //TODO: Set the autonomous pose estimate to the matching trajectory
@@ -168,9 +182,15 @@ public class Odometry extends LinearOpMode {
                         return 20;
                     }
                 }, null)
-                .strafeTo(new Vector2d(-100,-104))
+
                 .build();
 
+        Trajectory strafe = drive.trajectoryBuilder(auto.end())
+                .strafeRight(180)
+                .build();
+        Trajectory back = drive.trajectoryBuilder((strafe.end()))
+                .back(12)
+                .build();
 
 
         waitForStart();
@@ -179,15 +199,21 @@ public class Odometry extends LinearOpMode {
         // Note that the left/right part of the trajectories is based on the side that you are
         // facing, as in "blueleft" is across from "redright". (see lines 95-109)
         drive.followTrajectory(auto);
+        drive.followTrajectory(strafe);
+        drive.followTrajectory(back);
         // This tells the robot to follow the trajectory in the argument.
         Pose2d poseEstimate = drive.getPoseEstimate();
-        telemetry.addData("finalX", poseEstimate.getX());
-        telemetry.addData("finalY", poseEstimate.getY());
-        telemetry.addData("finalHeading", poseEstimate.getHeading());
-        telemetry.update();
+
+
+        while (opModeIsActive()) {
+            telemetry.addData("Left wheel", leftEncoder.getCurrentPosition());
+            telemetry.addData("Right wheel", rightEncoder.getCurrentPosition());
+            telemetry.addData("Front wheel", frontEncoder.getCurrentPosition());
+            telemetry.update();
+        }
         // Final updates after following the trajectory
 
-        while (!isStopRequested() && opModeIsActive()) ;
+
     }
 
 }

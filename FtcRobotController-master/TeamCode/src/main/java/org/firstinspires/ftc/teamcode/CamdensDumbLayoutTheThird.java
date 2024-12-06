@@ -43,7 +43,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 
-@TeleOp(name="Kypten's Dumb Layout The Third", group="Linear Opmode")
+@TeleOp(name="Kypten's Dumb Layout The First", group="Linear Opmode")
 public class CamdensDumbLayoutTheThird extends LinearOpMode {
 
     // Declare OpMode objects
@@ -53,6 +53,10 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
+    private DcMotor armSwing = null;
+    private DcMotor inOutLeft = null;
+    private DcMotor inOutRight = null;
+    private Servo teeth = null;
 
     //timer
     private final ElapsedTime timer = new ElapsedTime();
@@ -62,12 +66,15 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
     public void runOpMode() {
 
 
-
         // Find objects on Driver Controller
-        frontLeftDrive  = hardwareMap.get(DcMotor.class, "front_left");
-        backLeftDrive  = hardwareMap.get(DcMotor.class, "back_left");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "front_right");
-        backRightDrive = hardwareMap.get(DcMotor.class, "back_right");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "back_left");
+        backLeftDrive = hardwareMap.get(DcMotor.class, "back_right");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "front_left");
+        backRightDrive = hardwareMap.get(DcMotor.class, "front_right");
+        armSwing = hardwareMap.get(DcMotor.class, "armSwing");
+        inOutLeft = hardwareMap.get(DcMotor.class, "inOutLeft");
+        inOutRight = hardwareMap.get(DcMotor.class, "inOutRight");
+        teeth = hardwareMap.get(Servo.class, "teeth");
 
         int slow = 1;
 
@@ -77,6 +84,9 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        inOutLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
 
         waitForStart();
         runtime.reset();
@@ -86,6 +96,11 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
         frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        inOutLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        inOutRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armSwing.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        inOutLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        inOutRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Run with encoder
         frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -94,12 +109,9 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
         backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
-
-
-
-
         // Declare random variables
         boolean changed = false;
+        boolean changed1 = false;
 
         double drive;
         double strafe;
@@ -108,9 +120,9 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
         double frontRightPower;
         double backLeftPower;
         double backRightPower;
-
-        double liftPos = 0;
-        int liftTargPos = 0;
+        int inOutPosition = 0;
+        double teethPos = 0;
+        int armSwingPosition = 0;
 
 
 
@@ -120,30 +132,87 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
             // Drive variables
             drive = -gamepad1.left_stick_x;
             strafe = gamepad1.left_stick_y;
-            turn  =  gamepad1.right_stick_x;
+            turn = gamepad1.right_stick_x;
 
             // Setting the 3 intake servos
 
             // slow mode! //
-            if(gamepad1.a && !changed) {
-                if(slow == 1) slow = 2;
+            if (gamepad1.a && !changed) {
+                if (slow == 1) slow = 2;
                 else slow = 1;
                 changed = true;
-            } else if(!gamepad1.a) changed = false;
+            } else if (!gamepad1.a) changed = false;
+
+            if (gamepad2.left_trigger - gamepad2.right_trigger != 0){
+                if (gamepad2.left_trigger != 0){
+                    inOutPosition = inOutPosition + 40;
+                }
+                else{
+                    inOutPosition = inOutPosition - 40;
+                }
+            }
+            if (inOutPosition <= -40){
+                inOutPosition = 40;
+            }
+
+
+
+
+            if (gamepad2.a && !changed1) {
+                if (teethPos == 1) teethPos = 0;
+                else teethPos = 1;
+                changed1 = true;
+            } else if (!gamepad2.a) changed1 = false;
+
+            if(gamepad2.left_stick_y != 0){
+                if (gamepad2.left_stick_y > 0){
+                    armSwingPosition += 20;
+                }
+                else
+                    armSwingPosition -= 20;
+                if (armSwingPosition >= 20){
+                    armSwingPosition = -20;
+                }
+            }
+
+            armSwing.setTargetPosition(armSwingPosition);
+
+            inOutRight.setTargetPosition(inOutPosition);
+            inOutLeft.setTargetPosition(inOutPosition);
+
+            armSwing.setPower(1);
+
+            inOutRight.setPower(1);
+            inOutLeft.setPower(1);
+
+            armSwing.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            inOutRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            inOutLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+
+
+
+
+
+
+
+
+
+            teeth.setPosition(teethPos);
 
 
 
             // Drive equations
-            frontLeftPower    = Range.clip((drive + strafe - turn)/slow, -0.75, 0.75);
-            frontRightPower   = Range.clip((drive - strafe - turn)/slow, -0.75, 0.75);
-            backLeftPower    = Range.clip((drive - strafe + turn)/slow, -0.75, 0.75);
-            backRightPower   = Range.clip((drive + strafe + turn)/slow, -0.75, 0.75);
+            frontLeftPower = Range.clip((drive + strafe - turn) / slow, -0.75, 0.75);
+            frontRightPower = Range.clip((drive - strafe - turn) / slow, -0.75, 0.75);
+            backLeftPower = Range.clip((drive - strafe + turn) / slow, -0.75, 0.75);
+            backRightPower = Range.clip((drive + strafe + turn) / slow, -0.75, 0.75);
 
             frontLeftDrive.setPower(frontLeftPower);
             backLeftDrive.setPower(backLeftPower);
             frontRightDrive.setPower(frontRightPower);
             backRightDrive.setPower(backRightPower);
-
 
 
             // TELEMETRY
@@ -153,6 +222,10 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
             telemetry.addData("FR Encoder", frontRightDrive.getCurrentPosition());
             telemetry.addData("BL Encoder", backLeftDrive.getCurrentPosition());
             telemetry.addData("BR Encoder", backRightDrive.getCurrentPosition());
+
+            telemetry.addData("target pos var", inOutPosition);
+            telemetry.addData("left pos", inOutLeft.getCurrentPosition());
+            telemetry.addData("right pos", inOutRight.getCurrentPosition());
 
             telemetry.addData("FL Power", frontLeftPower);
             telemetry.addData("FR Power", frontRightPower);
