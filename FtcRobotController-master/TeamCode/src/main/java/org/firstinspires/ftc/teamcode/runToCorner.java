@@ -36,26 +36,19 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.sun.tools.javac.util.Position;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.util.Encoder;
-import org.opencv.core.Mat;
 
 
-@Autonomous(name="Odometry", group="Autonomous")
-public class Odometry extends LinearOpMode {
+@Autonomous(name="Run To Corner", group="Autonomous")
+public class runToCorner extends LinearOpMode {
 
     // Declare OpMode objects
     private final ElapsedTime runtime = new ElapsedTime();
@@ -170,7 +163,7 @@ public class Odometry extends LinearOpMode {
                         return 20;
                     }
                 }, null)
-                .splineTo(new Vector2d(-66, -51), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                .splineTo(new Vector2d(-62, -51), Math.toRadians(270), new TrajectoryVelocityConstraint() {
                     @Override
                     public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
                         return 20;
@@ -186,7 +179,7 @@ public class Odometry extends LinearOpMode {
                 .build();
 
         Trajectory strafe = drive.trajectoryBuilder(auto.end())
-                .strafeRight(180)
+                .strafeRight(24)
                 .build();
         Trajectory back = drive.trajectoryBuilder((strafe.end()))
                 .back(12)
@@ -198,9 +191,9 @@ public class Odometry extends LinearOpMode {
         //TODO: Change the followed trajectory to match its position on the field
         // Note that the left/right part of the trajectories is based on the side that you are
         // facing, as in "blueleft" is across from "redright". (see lines 95-109)
-        drive.followTrajectory(auto);
+
         drive.followTrajectory(strafe);
-        drive.followTrajectory(back);
+
         // This tells the robot to follow the trajectory in the argument.
         Pose2d poseEstimate = drive.getPoseEstimate();
 

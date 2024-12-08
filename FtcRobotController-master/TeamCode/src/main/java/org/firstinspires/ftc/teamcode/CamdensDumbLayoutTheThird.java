@@ -151,9 +151,10 @@ public class CamdensDumbLayoutTheThird extends LinearOpMode {
                     inOutPosition = inOutPosition - 40;
                 }
             }
-            if (inOutPosition <= -40){
+            if (inOutPosition <= -20)
                 inOutPosition = 40;
-            }
+            if (inOutPosition >= 3100)
+                inOutPosition = 3000;
 
 
 
