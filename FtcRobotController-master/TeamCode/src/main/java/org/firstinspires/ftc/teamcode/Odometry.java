@@ -158,7 +158,7 @@ public class Odometry extends LinearOpMode {
                         return 20;
                     }
                 }, null)
-                .splineTo(new Vector2d(-56, -30), Math.toRadians(90), new TrajectoryVelocityConstraint() {
+                .splineTo(new Vector2d(-56, -6), Math.toRadians(90), new TrajectoryVelocityConstraint() {
                     @Override
                     public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
                         return 10;
@@ -170,7 +170,7 @@ public class Odometry extends LinearOpMode {
                         return 20;
                     }
                 }, null)
-                .splineTo(new Vector2d(-62, -51), Math.toRadians(270), new TrajectoryVelocityConstraint() {
+                .splineTo(new Vector2d(-62, -60), Math.toRadians(270), new TrajectoryVelocityConstraint() {
                     @Override
                     public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
                         return 20;
