@@ -110,8 +110,8 @@ public class Odometry extends LinearOpMode {
         This is a representation of the game field's starting positions:
            robot ↓               robot ↓
         ╔══/═══════════════════════════════\═╗
-        ╠═/ redright         ↑  +x redleft  \║
-        ║                       +y           ║
+        ╠═/ redright         ↑  +y redleft  \║
+        ║                       +x           ║
         ║ █ █ █        /╔══╗\   →      █ █ █ ║
         ║             / ║██║ \               ║
         ║             \ ║██║ /               ║
